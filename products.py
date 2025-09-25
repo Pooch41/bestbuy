@@ -1,4 +1,4 @@
-def validate_name(name:str) -> str:
+def validate_name(name: str) -> str:
     while True:
         try:
             valid_name = name
@@ -10,7 +10,8 @@ def validate_name(name:str) -> str:
             name = input("Enter a new name: ")
     return valid_name
 
-def validate_price(price: float) -> float:
+
+def validate_price(name: str, price: float) -> float:
     while True:
         try:
             valid_price = round(float(price), 2)
@@ -18,12 +19,13 @@ def validate_price(price: float) -> float:
                 raise ValueError
             break
         except ValueError:
-            print("Error - Please enter a valid price "
+            print(f"Error - Please enter a valid {name} price "
                   "(Prices must be a number greater or equal to 0.01)!")
             price = round(float(input("Enter a new price: ")))
     return valid_price
 
-def validate_quantity(quantity: int) -> int:
+
+def validate_quantity(name: str, quantity: int) -> int:
     while True:
         try:
             valid_quantity = int(quantity)
@@ -31,15 +33,16 @@ def validate_quantity(quantity: int) -> int:
                 raise ValueError
             break
         except ValueError:
-            print("Error - Please Enter a ")
+            print(f"Error - Please enter valid {name} quantity (Quantities must be zero or above.")
             quantity = int(input("Enter a new quantity"))
     return valid_quantity
+
 
 class Product:
     def __init__(self, name: str, price: float, quantity) -> None:
         self.name = validate_name(name)
-        self.price = validate_price(price)
-        self.quantity = validate_quantity(quantity)
+        self.price = validate_price(self.name, price)
+        self.quantity = validate_quantity(self.name, quantity)
         self.is_activated = True
 
     def deactivate(self) -> None:
@@ -57,7 +60,7 @@ class Product:
         return self.is_activated
 
     def set_quantity(self, quantity: int) -> None:
-        self.quantity = validate_quantity(quantity)
+        self.quantity = validate_quantity(self.name, quantity)
         if self.quantity == 0:
             print(f"{self.name} is out of stock!")
             self.deactivate()
@@ -68,7 +71,7 @@ class Product:
         print(f"{self.name}, Price: {self.price}, Quantity: {self.quantity}")
 
     def buy(self, quantity):
-        quantity = validate_quantity(quantity)
+        quantity = validate_quantity(self.name, quantity)
         if (self.get_quantity() - quantity) < 0:
             print(f"Insufficient product! {self} name in stock {self.get_quantity()}")
             return None
