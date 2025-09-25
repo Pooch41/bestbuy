@@ -1,6 +1,8 @@
 import products
 
+
 def validate_inventory(product, inventory):
+    """Validates if item is in inventory. Offers corrections."""
     while True:
         if product in inventory:
             return product
@@ -10,25 +12,33 @@ def validate_inventory(product, inventory):
                 print(f"Type '{item}' for '{item.name}'")
             product = input("Enter desired product: ")
 
+
 class Store:
     def __init__(self, list_of_products: list) -> None:
         self.inventory = list_of_products
 
     def add_product(self, new_product: products.Product) -> None:
+        """RECEIVES: new product
+        Adds new product to the store inventory."""
         self.inventory.append(new_product)
 
-
     def remove_product(self, product_to_remove: products.Product) -> None:
+        """RECEIVES: product to remove
+        Removes said product from inventory."""
         product_to_remove = validate_inventory(product_to_remove)
         self.inventory.remove(product_to_remove)
 
     def get_total_quantity(self) -> int:
+        """Get total quantity of products in inventory"""
         return sum(product.quantity for product in self.inventory)
 
     def get_all_products(self) -> list[products.Product]:
+        """Gets all products in inventory."""
         return [product for product in self.inventory if product.is_active()]
 
     def order(self, shopping_list: list[tuple[products.Product, int]]) -> float:
+        """RECEIVES: shopping list
+        Returns total expense of all combined items in shopping list."""
         total = 0
         for item in shopping_list:
             product = validate_inventory(item[0], self.inventory)
